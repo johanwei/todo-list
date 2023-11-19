@@ -1,20 +1,79 @@
-import { ITask } from "../interfaces/ITask"
+import { useState } from "react"
 
 interface IProps {
     id: string,
     name: string,
     completed: boolean
+    inverseTaskCompletion: (id: string) => void
+    editTaskName: (id: string, taskName: string) => void
     deleteTask: (id: string) => void
 }
 
 export const Task = (props: IProps) => {
+    const [isEditing, setEditing] = useState(false)
+    const [newName, setNewName] = useState("")
+
+    const handleInputChange = (value: any) => {
+        setNewName(value.target.value)
+    } 
+
+    function handleSubmit() {
+        props.editTaskName(props.id, newName)
+        setNewName("")
+        setEditing(false)
+    }
+
+    const editingTemplate = (
+        <form className="stack-small">
+          <div className="form-group">
+            <label className="todo-label">
+              New name for {props.name}
+            </label>
+            <input id={props.id} className="todo-text" type="text" onChange={handleInputChange} value={newName} />
+          </div>
+          <div className="btn-group">
+            <button type="button" className="btn todo-cancel" onClick={() => setEditing(false)}>
+              Cancel
+              <span className="visually-hidden">renaming {props.name}</span>
+            </button>
+            <button type="submit" className="btn btn__primary todo-edit" onClick={handleSubmit}>
+              Save
+              <span className="visually-hidden">new name for {props.name}</span>
+            </button>
+          </div>
+        </form>
+      );
+
+      const viewTemplate = (
+        <div className="stack-small">
+          <div className="c-cb">
+            <input
+              id={props.id}
+              type="checkbox"
+              checked={props.completed}
+              onChange={() => props.inverseTaskCompletion(props.id)}
+            />
+            <label style={{textDecoration: props.completed ? 'line-through' : ''}}  className="todo-label" htmlFor={props.id}>
+              {props.name}
+            </label>
+          </div>
+          <div className="btn-group">
+            <button type="button" className="btn" onClick={() => setEditing(true)}>
+              Edit <span className="visually-hidden">{props.name}</span>
+            </button>
+            <button
+              type="button"
+              className="btn btn__danger"
+              onClick={() => props.deleteTask(props.id)}>
+              Delete <span className="visually-hidden">{props.name}</span>
+            </button>
+          </div>
+        </div>
+      );
+      
     return (
         <li>
-            <input id={props.id} type="checkbox" defaultChecked={props.completed} />
-            <label>{props.name}</label>
-            <button className="btn" onClick={() => props.deleteTask(props.id)}>
-                Delete
-            </button>
+            {isEditing ? editingTemplate : viewTemplate}
         </li>
 
     )
