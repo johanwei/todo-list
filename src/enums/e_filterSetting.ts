@@ -1,5 +1,5 @@
 export enum e_filterSetting {
     all = "All",
-    notCompleted = "NotCompleted",
-    completed = "Completed"
+    todo = "Todo",
+    done = "Done"
 }

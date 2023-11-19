@@ -1,4 +1,6 @@
 import { useState } from "react"
+import { MdDelete } from "react-icons/md"
+import { CiEdit } from "react-icons/ci"
 
 interface IProps {
     id: string,
@@ -22,30 +24,27 @@ export const Task = (props: IProps) => {
         setNewName("")
         setEditing(false)
     }
-
+/*<label className="todo-label">
+              Edit task "{props.name}"
+            </label> */
     const editingTemplate = (
         <form className="stack-small">
           <div className="form-group">
-            <label className="todo-label">
-              New name for {props.name}
-            </label>
-            <input id={props.id} className="todo-text" type="text" onChange={handleInputChange} value={newName} />
+            <input id={props.id} className="todo-text" type="text" onChange={handleInputChange} defaultValue={props.name}  />
           </div>
           <div className="btn-group">
             <button type="button" className="btn todo-cancel" onClick={() => setEditing(false)}>
               Cancel
-              <span className="visually-hidden">renaming {props.name}</span>
             </button>
             <button type="submit" className="btn btn__primary todo-edit" onClick={handleSubmit}>
               Save
-              <span className="visually-hidden">new name for {props.name}</span>
             </button>
           </div>
         </form>
       );
 
       const viewTemplate = (
-        <div className="stack-small">
+        <div className="stack">
           <div className="c-cb">
             <input
               id={props.id}
@@ -53,22 +52,21 @@ export const Task = (props: IProps) => {
               checked={props.completed}
               onChange={() => props.inverseTaskCompletion(props.id)}
             />
-            <label style={{textDecoration: props.completed ? 'line-through' : ''}}  className="todo-label" htmlFor={props.id}>
+            <label style={{fontSize: "large", textDecoration: props.completed ? 'line-through' : ''}}  className="label__lg" htmlFor={props.id}>
               {props.name}
             </label>
-          </div>
-          <div className="btn-group">
+            </div>
+            <div>
             <button type="button" className="btn" onClick={() => setEditing(true)}>
-              Edit <span className="visually-hidden">{props.name}</span>
+              <CiEdit/>
             </button>
             <button
               type="button"
               className="btn btn__danger"
               onClick={() => props.deleteTask(props.id)}>
-              Delete <span className="visually-hidden">{props.name}</span>
-            </button>
+              <MdDelete/>
+            </button></div>
           </div>
-        </div>
       );
       
     return (

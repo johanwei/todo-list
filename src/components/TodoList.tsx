@@ -11,8 +11,8 @@ export const TodoList = () => {
 
     const FILTER_OPTIONS = {
         All: () => true,
-        Completed: (task: ITask) => task.completed,
-        NotCompleted: (task: ITask) => !task.completed
+        Done: (task: ITask) => task.completed,
+        Todo: (task: ITask) => !task.completed
     }
 
     // Creates a list of Task-JSX-elements based on the current list of task and filter settings.
@@ -24,6 +24,7 @@ export const TodoList = () => {
             inverseTaskCompletion={inverseTaskCompletion}
             editTaskName={editTaskName}
             deleteTask={deleteTask}
+            key={task.id}
             />
       ));
 
@@ -32,14 +33,15 @@ export const TodoList = () => {
         if (!taskContent) {
             return
         }
-
+        const newId = crypto.randomUUID().toString()
+        
         const currentTasks = [...tasks, 
             {
-                id: (tasks.length+1).toString(),
+                id: newId,
                 name: taskContent,
                 completed: false
             }
-        ] 
+        ]
 
         updateLocalStorageAndState(currentTasks)
         setTaskContent("")
@@ -105,7 +107,7 @@ export const TodoList = () => {
         <div className="todoapp">
             <h1>Todos @Montel</h1>
             <form onSubmit={createNewTask}>
-                <input className="input input__lg" type="text" onChange={handleInputChange} value={taskContent}/>
+                <input placeholder="Write a task here..." className="input input__lg" type="text" onChange={handleInputChange} value={taskContent}/>
                 <button className="btn btn__primary btn__lg" type="submit">
                     Add
                 </button>
@@ -115,7 +117,7 @@ export const TodoList = () => {
                     <input
                         type="checkbox"
                         checked={taskFilterSetting === e_filterSetting.all} 
-                        onClick={() => changeTaskFilterSetting(e_filterSetting.all)}
+                        onChange={() => changeTaskFilterSetting(e_filterSetting.all)}
                     />
                     <label className="todo-label">
                         All
@@ -124,21 +126,21 @@ export const TodoList = () => {
                 <div className="c-cb">
                     <input
                         type="checkbox"
-                        checked={taskFilterSetting === e_filterSetting.notCompleted} 
-                        onClick={() => changeTaskFilterSetting(e_filterSetting.notCompleted)}
+                        checked={taskFilterSetting === e_filterSetting.todo} 
+                        onChange={() => changeTaskFilterSetting(e_filterSetting.todo)}
                     />
                     <label className="todo-label">
-                        Not completed
+                        Todo
                     </label>
                 </div>
                 <div className="c-cb">
                     <input
                         type="checkbox"
-                        checked={taskFilterSetting === e_filterSetting.completed} 
-                        onClick={() => changeTaskFilterSetting(e_filterSetting.completed)}
+                        checked={taskFilterSetting === e_filterSetting.done} 
+                        onChange={() => changeTaskFilterSetting(e_filterSetting.done)}
                     />
                     <label className="todo-label">
-                        Completed
+                        Done
                     </label>
                 </div>
             </div>
