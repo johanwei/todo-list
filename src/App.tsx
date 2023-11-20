@@ -1,4 +1,5 @@
-import { TodoList } from './components/TodoList';
+import { TodoList } from "./components/TodoList";
+import logo from "./logo.png";
 
 function App() {
   return (
