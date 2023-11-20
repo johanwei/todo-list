@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  app:
+    build: ./todo-list
+    container_name: todo-list_c
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./src:/app/src
+    stdin_open: true
+    tty: true
